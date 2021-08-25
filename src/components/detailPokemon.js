@@ -1,14 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react';
 import {View, ScrollView, Text, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Stats from './stats';
+import NavigationButtons from '../components/navigation';
+import TypePokemon from './typePokemon';
+import Location from './location';
+import styles from '../styles/styles';
 
 function DetailPokemon(props) {
-    const [male, setMale] = useState(true)
-    const [front, setFront] = useState(true)
-    const [imageSelected, setImageSelected] = useState(props.pokemonDetails.sprites.front_default)
+    const [male, setMale] = useState(true);
+    const [front, setFront] = useState(true);
+    const [imageSelected, setImageSelected] = useState(props.pokemonDetails.sprites.front_default);
+    
     useEffect(() => {
-        imageSelector()
+        imageSelector();
+        
     });
     const imageSelector = () => {
         if(male === true){
@@ -23,51 +29,57 @@ function DetailPokemon(props) {
                 setImageSelected(props.pokemonDetails.sprites.back_female);
                 }
     }
+    const changePokeSelected = (id) => {
+            var url = 'https://pokeapi.co/api/v2/pokemon/' + id + '/';
+        props.changePokemon(url)
+    }
+    
     return (
         <ScrollView style={{flex:1}}>
-            <Text style={{textAlign:'center'}}>#{props.pokemonDetails.id} {props.pokemonDetails.name}</Text>
-            <View style={{flexDirection:'row', paddingHorizontal:5}}>
+            <NavigationButtons 
+              backTitle={(props.pokemonDetails.id === 1)? '' : '# ' + (props.pokemonDetails.id - 1)}
+              nextTitle={'# ' + (props.pokemonDetails.id + 1)}
+              actionBack={() => {changePokeSelected((props.pokemonDetails.id - 1))}}
+              actionNext={() => {changePokeSelected((props.pokemonDetails.id + 1))}}
+              disabled={(props.pokemonDetails.id === 1)}
+            />
+            <Text style={[styles.textCenter, styles.pokeName]}>#{props.pokemonDetails.id} {props.pokemonDetails.name}</Text>
+            <View style={styles.rowView}>
                 <TouchableOpacity onPress={() => setFront(!front)}>
                     <Icon name="rotate-left" size={45} color="#0072B0" />
                 </TouchableOpacity>
                 
-                <View style={{flex:1}}><Image style={{ height: 250, resizeMode:'contain' }}
+                <View style={{flex:1}}><Image style={styles.pokeImage}
                     source={{ uri: (imageSelected)}}
                 /></View>
                 <TouchableOpacity onPress={() => setFront(!front)}>
                     <Icon name="rotate-right" size={45} color="#0072B0" />
                 </TouchableOpacity>
             </View>
-            <Text>Gender:</Text>
-            <View style={{flexDirection:'row', justifyContent:'center'}}>
-                <TouchableOpacity disabled={(props.pokemonDetails.sprites.front_female === null)} onPress={() => setMale(!male)}>
+            <Text style={styles.statText}>Gender:</Text>
+            <View style={styles.gender}>
+                <TouchableOpacity disabled={(props.pokemonDetails.sprites.front_female === null)} onPress={() => setMale(true)}>
                     <Icon name="pokeball" size={45} color="#0072B0" />
                 </TouchableOpacity>
-                <TouchableOpacity disabled={(props.pokemonDetails.sprites.front_female === null)} onPress={() => setMale(!male)}>
+                <TouchableOpacity disabled={(props.pokemonDetails.sprites.front_female === null)} onPress={() => setMale(false)}>
                     <Icon name="pokeball" size={45} color="#DD2D51" />
                 </TouchableOpacity>
             </View>
-            <View style={{flexWrap:'wrap', flexDirection:'row', backgroundColor:'#225B68'}}>
-                <View style={{flexDirection:'column', flex:1}}>
-                    <Text style={{textAlign:'center', color:'#56C4C1'}}>Height: {props.pokemonDetails.height}"</Text>
+            <View style={styles.infoPokeView}>
+                <View style={styles.flex}>
+                    <Text style={styles.infoText}>Height: {props.pokemonDetails.height}"</Text>
                 </View>
-                <View style={{flexDirection:'column', flex:1}}>
-                    <Text style={{textAlign:'center', color:'#56C4C1'}}>Weight: {props.pokemonDetails.weight} lbs</Text>
+                <View style={styles.flex}>
+                    <Text style={styles.infoText}>Weight: {props.pokemonDetails.weight} lbs</Text>
                 </View>
             </View>
-            <Text>Type:</Text>
-            <View style={{flexWrap:'wrap', flexDirection:'row'}}>
-                {props.pokemonDetails.types.map((type, i) => (
-                    <View key={i} style={{flexDirection:'column', width:'50%', backgroundColor:'red'}}>
-                        <Text style={{textAlign:'center', color:'#56C4C1'}}>{type.type.name}</Text>
-                    </View>
-                ))}
-             </View>
-             <ScrollView horizontal={true} style={{flexDirection:'row', paddingHorizontal:5}}>
-                {props.pokemonDetails.stats.map((stat, i) => (
-                    <Stats key={i} stat={stat} />
-                ))}
-             </ScrollView>
+            <TypePokemon types={props.pokemonDetails.types}/>
+            <ScrollView horizontal={true} style={styles.rowView}>
+            {props.pokemonDetails.stats.map((stat, i) => (
+                <Stats key={i} stat={stat} />
+            ))}
+            </ScrollView>
+             <Location id={props.pokemonDetails.id} />
          </ScrollView>
     )
 }

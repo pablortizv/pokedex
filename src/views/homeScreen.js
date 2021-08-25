@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View} from 'react-native';
 import LoadingComponent from '../components/loading';
 import ErrorComponent from '../components/error';
 import PokeList from '../components/pokeList';
+import NavigationButtons from '../components/navigation';
+import styles from '../styles/styles';
 
 
 function HomeScreen({ navigation }) {
@@ -12,8 +14,8 @@ function HomeScreen({ navigation }) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [pokemons, setPokemons] = useState([])
-  useEffect(async () => {
-    await getPokemons(next)
+  useEffect( () => {
+    getPokemons(next)
     }, []);
   
   const getPokemons = async (send) => {
@@ -38,22 +40,20 @@ function HomeScreen({ navigation }) {
       setLoading(false)
   }
     return (
-      <View style={{flex:1, backgroundColor:'#56C4C1', borderWidth:10, borderColor:'#B0B0B0'}}>
+      <View style={styles.viewScreen}>
         {
           loading? <LoadingComponent/> : 
           (error? <ErrorComponent/> 
             :
-          <View style={{flex:1}}>
-            <Text>Search by name or Pokedex number.</Text>
+          <View style={styles.flex}>
             <PokeList detailSelected ={(selected)=>navigation.navigate('Detail', { url: selected})} pokemons={pokemons}/> 
-            <View>
-              <TouchableOpacity  disabled={(previous === '')} style={{padding:10}} onPress={()=>getPokemons(previous)}>
-                <Text>previous</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{padding:10}} onPress={()=>getPokemons(next)}>
-                <Text>Next</Text>
-              </TouchableOpacity>
-            </View>
+            <NavigationButtons 
+              backTitle={'Previous'}
+              nextTitle={'Next'}
+              actionBack={() => {getPokemons(previous)}}
+              actionNext={() => {getPokemons(next)}}
+              disabled={(previous === '')}
+            />
           </View>
           )
         }

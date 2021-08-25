@@ -1,23 +1,24 @@
 import React from 'react'
 import {View, ScrollView, Text, Image, TouchableOpacity} from 'react-native';
+import styles from '../styles/styles';
 
 function Stats(props) {
     var stat = props.stat;
     var value = (stat.base_stat / 180);
     var name = stat.stat.name.replace(/-/g, ' ');
     return (
-        <View style={{flexDirection:'column', flex:1, marginTop:10, paddingHorizontal:5, width:65}}>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .9? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .8? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .7? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .6? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .5? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .4? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .3? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .2? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .1? 'green': 'white'), width:'100%'}}></View>
-            <View style={{height:10,marginBottom:1, backgroundColor:(value > .0? 'green': 'white'), width:'100%'}}></View>
-            <View><Text style={{textAlign:'center', color:'#225B68'}}>{name}</Text></View>
+        <View style={styles.statView}>
+            <View style={[styles.stat, {backgroundColor:(value > .9? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .8? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .7? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .6? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .5? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .4? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .3? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .2? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .1? '#46A456': '#FDFDFD')}]}></View>
+            <View style={[styles.stat, {backgroundColor:(value > .0? '#46A456': '#FDFDFD')}]}></View>
+            <View><Text style={[styles.statText, styles.textCenter]}>{name}</Text></View>
         </View>
     )
 }

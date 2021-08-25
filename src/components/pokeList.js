@@ -1,18 +1,20 @@
-import React from 'react'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
-
+import React from 'react';
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import styles from '../styles/styles';
 
 function PokeList(props) {
 
     return (
-        <ScrollView style={{flex:1, borderWidth:1}}>
+        <ScrollView style={styles.flex}>
              {props.pokemons.map((pokemon, i) => (
-                     <TouchableOpacity  
+                    <TouchableOpacity  
                         key={i} 
                         onPress={() => props.detailSelected(pokemon.url)} 
-                        style={{flex:1, padding:5, borderBottomWidth:2, borderColor:'#225B68'}}
+                        style={[styles.rowView,styles.btnPokeList]}
                     >
-                        <Text style={{fontSize:25, color:'#225B68'}}>{pokemon.name}</Text>
+                        <Icon name="pokeball" size={30} color="#0072B0" />
+                        <Text style={styles.pokeName}> {pokemon.name}</Text>
                      </TouchableOpacity>
              ))}
         </ScrollView>
